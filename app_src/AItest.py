@@ -3,8 +3,7 @@ from openai import OpenAI
 import PIL
 import pyautogui as gui
 import io
-import base64 
-import tkinter as tk  
+import base64  
 
 # global variables
 ImgWidth = 480
@@ -27,30 +26,6 @@ def image_to_base64_str(pil_image):
     byte_arr = byte_arr.getvalue()
     return str(base64.b64encode(byte_arr).decode('utf-8'))
 
-root = tk.Tk()
-root.withdraw()
-
-popup = tk.Toplevel(root)
-popup.title = "AI Response"
-
-message_label = tk.Label(popup, text="Initial Message", width=40, height=10)
-message_label.pack(padx=20, pady=20)
-
-message_queue = []
-
-def update_message(new_message):
-  message_label.config(text=new_message)
-
-def process_stream():
-  global message_queue
-
-  if message_queue:  # Check if there are messages to process
-      message = message_queue.pop(0)
-      update_message(message)
-
-  # Schedule this function to be called again after 100ms
-  popup.after(100, process_stream)
-
 base64_image = image_to_base64_str(Capture())
 
 
@@ -64,7 +39,7 @@ completion = client.chat.completions.create(
       "content": [
         {
           "type": "text",
-          "text": "Describe the image in the form of alt-text for a screen reader.",
+          "text": "Describe the image in the form of alt-text for a screen reader. Be accurate and precise.",
         },
         {
           "type": "image_url",
@@ -76,17 +51,9 @@ completion = client.chat.completions.create(
     }
   ],
 )
-
-def handle_stream():
-  for chunk in completion:
-    if chunk.choices[0].delta.content is not None:
-      message = chunk.choices[0].delta.content
-      print(message, end="", flush=True)
-      message_queue.append(message)
-
-  # Call process_stream to update the UI
-  process_stream()
-
-handle_stream()
-
-popup.mainloop()
+message = ""
+for chunk in completion:
+  if (chunk.choices[0].delta.content != None):
+    message_chunk = chunk.choices[0].delta.content
+    print(message_chunk, end = "", flush = True)
+    message += message_chunk
