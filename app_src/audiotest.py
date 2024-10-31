@@ -13,9 +13,9 @@ local_file = 'model_src//v3_en.pt'
 model = torch.package.PackageImporter(local_file).load_pickle("tts_models", "model")
 model.to(device)
 
-example_text = 'This is a test file.'
+example_text = "The image shows a large, inflatable rubber duck floating on a body of water. In the background, there is a city skyline with buildings and a bridge, suggesting that this could be a photo taken from a riverbank or a dock in an urban area. The sky is dusky with shades of blue, indicating either dawn or dusk. There's also a hint of colorful clouds, adding to the serene ambiance of the scene. The rubber duck seems to be placed there as part of an event or simply for fun."
 sample_rate = 48000
-speaker='en_0'
+speaker='en_13'
 
 audio_paths = model.save_wav(text=example_text,
                              speaker=speaker,
