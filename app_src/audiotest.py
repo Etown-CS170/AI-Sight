@@ -20,3 +20,26 @@ speaker='en_13'
 audio_paths = model.save_wav(text=example_text,
                              speaker=speaker,
                              sample_rate=sample_rate)
+
+def text_to_audio(inputText, speaker = 13):
+    if speaker < 0 or speaker > 117:
+        speaker = 13
+    
+    if torch.cuda.is_available():
+        device = torch.device("cuda")  # Use GPU
+    else:
+        device = torch.device("cpu")  # Use CPU
+        torch.set_num_threads(4)
+
+    local_file = 'model_src//v3_en.pt'
+    sample_rate = 48000
+    speaker=f'en_{speaker}'
+
+    model = torch.package.PackageImporter(local_file).load_pickle("tts_models", "model")
+    model.to(device)
+
+    audio_paths = model.save_wav(text=example_text,
+                                speaker=speaker,
+                                sample_rate=sample_rate)
+    
+    return audio_paths

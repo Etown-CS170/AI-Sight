@@ -30,30 +30,31 @@ base64_image = image_to_base64_str(Capture())
 
 
 # AI inference with user input for test
-completion = client.chat.completions.create(
-  stream = True,
-  model="model-identifier",
-  messages=[
-    {
-      "role": "user",
-      "content": [
-        {
-          "type": "text",
-          "text": "Describe the image in the form of alt-text for a screen reader. Be accurate and precise.",
-        },
-        {
-          "type": "image_url",
-          "image_url": {
-            "url":  f"data:image/jpeg;base64,{base64_image}"
+
+def get_response(streaming):
+  completion = client.chat.completions.create(
+    stream = streaming,
+    model="model-identifier",
+    messages=[
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Describe the image in the form of alt-text for a screen reader. Be accurate and precise.",
           },
-        },
-      ],
-    }
-  ],
-)
-message = ""
-for chunk in completion:
-  if (chunk.choices[0].delta.content != None):
-    message_chunk = chunk.choices[0].delta.content
-    print(message_chunk, end = "", flush = True)
-    message += message_chunk
+          {
+            "type": "image_url",
+            "image_url": {
+              "url":  f"data:image/jpeg;base64,{base64_image}"
+            },
+          },
+        ],
+      }
+    ],
+  )
+  return completion
+
+
+message = get_response(streaming = False)
+print(message)
