@@ -26,12 +26,12 @@ def image_to_base64_str(pil_image):
     byte_arr = byte_arr.getvalue()
     return str(base64.b64encode(byte_arr).decode('utf-8'))
 
-base64_image = image_to_base64_str(Capture())
+#base64_image = image_to_base64_str(Capture())
 
 
 # AI inference with user input for test
 
-def get_response(streaming):
+def get_response(base64_image, streaming = False):
   completion = client.chat.completions.create(
     stream = streaming,
     model="model-identifier",
@@ -56,5 +56,5 @@ def get_response(streaming):
   return completion
 
 
-message = get_response(streaming = False)
-print(message)
+# message = get_response()
+# print(message)
