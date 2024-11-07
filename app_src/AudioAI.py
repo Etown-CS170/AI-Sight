@@ -38,8 +38,12 @@ def text_to_audio(inputText, speaker = 13):
     model = torch.package.PackageImporter(local_file).load_pickle("tts_models", "model")
     model.to(device)
 
-    audio_paths = model.save_wav(text=inputText,
-                                speaker=speaker,
-                                sample_rate=sample_rate)
+    custom_audio_path = r"app_src/audioOutputs/audio.wav"
+    audio_paths = model.save_wav(
+        text=inputText,
+        speaker=speaker,
+        sample_rate=sample_rate,
+        audio_path=custom_audio_path
+        )
     
-    return audio_paths
+    return custom_audio_path

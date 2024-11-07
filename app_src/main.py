@@ -1,6 +1,6 @@
 import ImageAI
 import AudioAI
-import playsound
+from playsound import playsound
 import keyboard
 
 
@@ -14,6 +14,8 @@ while True:
     cmd = keyboard.read_key()
 
     if cmd == 'x':
+        #testing only
+        print('exit')
         break
 
     #testing only
@@ -22,6 +24,8 @@ while True:
     if cmd == 'c':
         screen = ImageAI.Capture()
         screen = ImageAI.image_to_base64_str(screen)
+        #testing only
+        print('screenshot')
 
         responseText = ImageAI.get_response(screen)
 
@@ -29,4 +33,4 @@ while True:
         print(responseText)
 
         responseAudio = AudioAI.text_to_audio(responseText)
-        playsound(responseAudio)
+        playsound('app_src/audioOutputs/audio.wav')

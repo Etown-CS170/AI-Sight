@@ -53,7 +53,7 @@ def get_response(base64_image, streaming = False):
       }
     ],
   )
-  return completion
+  return completion.choices[0].message.content
 
 
 # message = get_response()
