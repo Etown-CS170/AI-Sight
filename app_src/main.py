@@ -33,4 +33,4 @@ while True:
         print(responseText)
 
         responseAudio = AudioAI.text_to_audio(responseText)
-        playsound('app_src/audioOutputs/audio.wav')
+        playsound("app_src/audioOutputs/audio.wav")

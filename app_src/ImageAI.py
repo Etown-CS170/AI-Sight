@@ -1,15 +1,17 @@
-import secret_keys
+from dotenv import load_dotenv
 from openai import OpenAI
 import PIL
 import pyautogui as gui
 import io
+import os
 import base64  
 
 # global variables
+load_dotenv()
 ImgWidth = 480
 ImgHeight = 480
-url = secret_keys.url
-API_KEY = secret_keys.API_KEY
+url = os.getenv('url')
+API_KEY = os.getenv('API_KEY')
 client = OpenAI(base_url= url, api_key= API_KEY)
 
 # functions
