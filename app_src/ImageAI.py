@@ -15,7 +15,7 @@ API_KEY = os.getenv('API_KEY')
 client = OpenAI(base_url= url, api_key= API_KEY)
 
 # functions
-def Capture(width = 480, height = 480):
+def Capture(width = 360, height = 360):
     x , y = gui.position()
     image = gui.screenshot()
 

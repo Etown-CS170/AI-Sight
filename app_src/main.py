@@ -21,7 +21,7 @@ while True:
     #testing only
     print('running')
 
-    if cmd == 'c':
+    if cmd == 'u':
         screen = ImageAI.Capture()
         screen = ImageAI.image_to_base64_str(screen)
         #testing only
@@ -33,4 +33,4 @@ while True:
         print(responseText)
 
         responseAudio = AudioAI.text_to_audio(responseText)
-        playsound("app_src/audioOutputs/audio.wav")
+        playsound("C:/Users/jhutc/OneDrive/Documents/CS Projects/AI-Sight/app_src/audioOutputs/audio.wav")

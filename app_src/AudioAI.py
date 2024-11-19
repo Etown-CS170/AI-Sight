@@ -1,11 +1,14 @@
 # V4
 import os
-import torch
+import torch_directml as torch
 
+# Check for GPU support (CUDA or DirectML)
 if torch.cuda.is_available():
-    device = torch.device("cuda")  # Use GPU
+    device = torch.device("cuda")  # Use NVIDIA GPU with CUDA
+elif torch.is_available():
+    device = torch.device("directml")  # Use AMD GPU with DirectML
 else:
-    device = torch.device("cpu")  # Use CPU
+    device = torch.device("cpu")  # Fallback to CPU
     torch.set_num_threads(4)
 local_file = 'model_src//v3_en.pt'
 
