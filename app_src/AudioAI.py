@@ -1,52 +1,56 @@
-# V4
 import os
-import torch_directml as torch
+import torch
+import torch_directml as dml
 
-# Check for GPU support (CUDA or DirectML)
-if torch.cuda.is_available():
-    device = torch.device("cuda")  # Use NVIDIA GPU with CUDA
-elif torch.is_available():
-    device = torch.device("directml")  # Use AMD GPU with DirectML
-else:
-    device = torch.device("cpu")  # Fallback to CPU
-    torch.set_num_threads(4)
-local_file = 'model_src//v3_en.pt'
+# Initialize DirectML device
+device = dml.device(0)
 
-
+# Load the TTS model
+local_file = os.path.join('model_src', 'v3_en.pt')
 model = torch.package.PackageImporter(local_file).load_pickle("tts_models", "model")
-model.to(device)
 
-# example_text = "The image shows a large, inflatable rubber duck floating on a body of water. In the background, there is a city skyline with buildings and a bridge, suggesting that this could be a photo taken from a riverbank or a dock in an urban area. The sky is dusky with shades of blue, indicating either dawn or dusk. There's also a hint of colorful clouds, adding to the serene ambiance of the scene. The rubber duck seems to be placed there as part of an event or simply for fun."
-# sample_rate = 48000
-# speaker='en_13'
+# Move tensors within the model to the DirectML device manually
+for attr_name in dir(model):
+    attr = getattr(model, attr_name)
+    if isinstance(attr, torch.Tensor):
+        try:
+            setattr(model, attr_name, attr.to(device))
+            print(f"Moved tensor attribute '{attr_name}' to {device}")
+        except Exception as e:
+            print(f"Could not move attribute '{attr_name}' to {device}: {e}")
 
-# audio_paths = model.save_wav(text=example_text,
-#                              speaker=speaker,
-#                              sample_rate=sample_rate)
 
-def text_to_audio(inputText, speaker = 13):
-    if speaker < 0 or speaker > 117:
-        speaker = 13
+def text_to_audio(input_text, speaker=13):
+    """
+    Convert text to audio using the TTS model.
+
+    Args:
+        input_text (str): The text to synthesize.
+        speaker (int): Speaker ID, defaults to 13. Must be between 0 and 117.
     
-    if torch.cuda.is_available():
-        device = torch.device("cuda")  # Use GPU
-    else:
-        device = torch.device("cpu")  # Use CPU
-        torch.set_num_threads(4)
+    Returns:
+        str: Path to the generated audio file.
+    """
+    if not (0 <= speaker <= 117):
+        speaker = 13  # Default speaker if out of range
 
-    local_file = 'model_src//v3_en.pt'
     sample_rate = 48000
-    speaker=f'en_{speaker}'
-
-    model = torch.package.PackageImporter(local_file).load_pickle("tts_models", "model")
-    model.to(device)
-
-    custom_audio_path = r"app_src/audioOutputs/audio.wav"
+    speaker_name = f'en_{speaker}'
+    custom_audio_path = os.path.join("app_src", "audioOutputs", "audio.wav")
+    
+    # Generate audio
     audio_paths = model.save_wav(
-        text=inputText,
-        speaker=speaker,
+        text=input_text,
+        speaker=speaker_name,
         sample_rate=sample_rate,
         audio_path=custom_audio_path
-        )
-    
+    )
     return custom_audio_path
+
+
+# Example usage
+if __name__ == "__main__":
+    # Generate audio for a sample text
+    text = "Hello, this is a test of the text-to-speech model."
+    generated_audio_path = text_to_audio(text)
+    print(f"Generated audio saved at: {generated_audio_path}")
