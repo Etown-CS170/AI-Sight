@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 from openai import OpenAI
-import PIL
 import pyautogui as gui
 import io
 import os

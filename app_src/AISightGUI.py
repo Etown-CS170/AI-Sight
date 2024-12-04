@@ -63,6 +63,7 @@ def on_submit_and_run():
 # Initialize the main application window
 root = tk.Tk()
 root.title("AI-Sight")
+root.geometry("400x400+200+200")
 
 # Width and Height Inputs
 width_label = tk.Label(root, text="Width:",font=("Arial", 25))
