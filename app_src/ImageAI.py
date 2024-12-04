@@ -10,19 +10,21 @@ import json
 # global variables
 
 if os.path.exists('values.json'): #GUI was run
-    with open("values.json", "r") as file:
-      data = json.load(file)
-    Width = data["width"]
-    Height = data["height"]
-    mode = data["mode"]
+  with open("values.json", "r") as file:
+    data = json.load(file)
+  Width = data["width"]
+  Height = data["height"]
+  mode = data["mode"]
 
-    if (mode == "Run Locally"):
-      load_dotenv()
-      url = os.getenv('url')
-      API_KEY = os.getenv('API_KEY')
-    else:
-      url = data.get("url")  # Use get() to avoid a KeyError if the key doesn't exist
-      api_key = data.get("api_key")
+  if (mode == "Run Locally"):
+    load_dotenv()
+    url = os.getenv('url')
+    API_KEY = os.getenv('API_KEY')
+  else:
+    url = data.get("url")  # Use get() to avoid a KeyError if the key doesn't exist
+    API_KEY = data.get("api_key")
+
+  client = OpenAI(base_url= url, api_key= API_KEY)
 
 else: #main was run without running GUI first
     load_dotenv()
