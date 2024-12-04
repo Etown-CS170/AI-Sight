@@ -5,14 +5,33 @@ import pyautogui as gui
 import io
 import os
 import base64  
+import json
 
 # global variables
-load_dotenv()
-ImgWidth = 480
-ImgHeight = 480
-url = os.getenv('url')
-API_KEY = os.getenv('API_KEY')
-client = OpenAI(base_url= url, api_key= API_KEY)
+
+if os.path.exists('values.json'): #GUI was run
+    with open("values.json", "r") as file:
+      data = json.load(file)
+    Width = data["width"]
+    Height = data["height"]
+    mode = data["mode"]
+
+    if (mode == "Run Locally"):
+      load_dotenv()
+      url = os.getenv('url')
+      API_KEY = os.getenv('API_KEY')
+    else:
+      url = data.get("url")  # Use get() to avoid a KeyError if the key doesn't exist
+      api_key = data.get("api_key")
+
+else: #main was run without running GUI first
+    load_dotenv()
+    url = os.getenv('url')
+    API_KEY = os.getenv('API_KEY')
+    client = OpenAI(base_url= url, api_key= API_KEY)
+    Width = 360
+    Weight = 360
+
 
 # functions
 def Capture(width = 360, height = 360):
