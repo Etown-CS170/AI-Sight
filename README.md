@@ -29,5 +29,5 @@ Audio generation, which is generally much faster, is currently always run locall
 
 Performance and usability when using AI-Sight with a cloud service has not been tested. You can probably still do it, as the API calls are Open-AI compatible, but I do now know for certain. As I have not done this setup myself, the steps below may not be exact, but it is how I expect the process to work if you choose to go through with it.
 
-1 -- Set up an account with your prefered service and aquire an API key.
+1 -- Set up an account with your preferred service and acquire an API key.
 2 -- Use their provided server URL and API Key when running AI-Sight.
